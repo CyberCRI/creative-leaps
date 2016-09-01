@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Creative Leaps Feedback</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="main.js"></script>
+</head>
+<body>
+	<div id="gameContent"></div> 
+
+	<script>
+		// Run Elm script in the body
+		var node = document.getElementById('gameContent');
+		var app = Elm.Main.embed(node);
+	</script>
+</body>
+</html>
