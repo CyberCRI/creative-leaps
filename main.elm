@@ -1,3 +1,5 @@
+port module Main exposing (..)
+
 import Html exposing (..)
 import Html.App as App
 import Http 
@@ -5,7 +7,7 @@ import Json.Decode exposing (..)
 import Task
 
 main =
-  App.program { init = init, view = view, subscriptions = subscriptions, update = update }
+  App.programWithFlags { init = init, view = view, subscriptions = subscriptions, update = update }
 
 
 -- Functions
@@ -30,15 +32,18 @@ type alias Model =
   }
 
 
-init : (Model, Cmd Msg)
-init = 
-  ({ foundShapeCount = 2 }, getSessionStats "d5625a22-f1dd-4887-bbee-c9bdcde9597b")
+init : { playerId: Maybe String } -> (Model, Cmd Msg)
+init flags = 
+  case flags.playerId of
+    Just playerId -> ({ foundShapeCount = 2 }, getSessionStats playerId)
+    Nothing -> ({ foundShapeCount = 2 }, Cmd.none)
 
 
 -- UPDATE
 
 type Msg = FetchSucceed (List Int)
   | FetchFail Http.Error 
+  | LocationSearch String
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -48,7 +53,7 @@ update msg model =
         Nothing -> (model, Cmd.none)
         Just x -> ({ model | foundShapeCount = x }, Cmd.none)
     FetchFail _ -> (model, Cmd.none)
-
+    LocationSearch s -> (model, getSessionStats s)
 
 -- SUBSCRIPTIONS
 
