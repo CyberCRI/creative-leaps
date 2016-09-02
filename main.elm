@@ -20,30 +20,47 @@ getSessionStats playerId =
   in
     Task.perform FetchFail FetchSucceed (Http.get decodeStatistics url)
 
-decodeStatistics : Decoder (List Int)
+decodeStatistics : Decoder (List Statistics)
 decodeStatistics =
-  list ("customData" := ("foundShapeCount" := int)) 
+  list ("customData" := (object6 Statistics 
+    ("foundShapeCount" := int) 
+    ("newShapeCount" := int)
+    ("categoryCount" := int)
+    ("meanCreated" := int)
+    ("beautifulPercent" := int)
+    ("foundPopularShape" := bool)
+   )) 
 
 
 -- MODEL
 
+type alias Statistics =
+  {
+    foundShapeCount : Int
+  , newShapeCount: Int
+  , categoryCount: Int
+  , meanCreated: Int
+  , beautifulPercent: Int
+  , foundPopularShape: Bool
+  }
+
 type alias Model = 
-  { foundShapeCount : Int
+  { playerId: Maybe String
+  , statistics: Maybe Statistics
   }
 
 
 init : { playerId: Maybe String } -> (Model, Cmd Msg)
 init flags = 
   case flags.playerId of
-    Just playerId -> ({ foundShapeCount = 2 }, getSessionStats playerId)
-    Nothing -> ({ foundShapeCount = 2 }, Cmd.none)
+    Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
+    Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
 
 
 -- UPDATE
 
-type Msg = FetchSucceed (List Int)
+type Msg = FetchSucceed (List Statistics)
   | FetchFail Http.Error 
-  | LocationSearch String
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -51,9 +68,8 @@ update msg model =
     FetchSucceed value -> 
       case (List.head value) of 
         Nothing -> (model, Cmd.none)
-        Just x -> ({ model | foundShapeCount = x }, Cmd.none)
+        Just statistics -> ({ model | statistics = Just statistics }, Cmd.none)
     FetchFail _ -> (model, Cmd.none)
-    LocationSearch s -> (model, getSessionStats s)
 
 -- SUBSCRIPTIONS
 
@@ -69,7 +85,8 @@ view model =
   div []
   [
     h1 [] [text "Creative Leaps - Feedback"]
-  , p [] [text "Hello, World from Elm!"]
-  , p [] [text ("You found " ++ (toString model.foundShapeCount) ++ " shapes")]
+  , case model.statistics of 
+      Just statistics -> p [] [text ("You found " ++ (toString statistics.foundShapeCount) ++ " shapes")]
+      Nothing -> p [] [text ("Can't find any statistics for you")]
   ]
 
