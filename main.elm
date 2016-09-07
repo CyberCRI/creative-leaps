@@ -5,6 +5,7 @@ import Html.App as App
 import Html.Attributes exposing (attribute)
 import Http 
 import Json.Decode exposing (..)
+import Json.Decode.Pipeline exposing (decode, required)
 import Task
 import Array
 import String
@@ -26,17 +27,17 @@ getSessionStats playerId =
 
 decodeStatistics : Decoder (List Statistics)
 decodeStatistics =
-  list ("customData" := (object10 Statistics 
-    ("foundShapeCount" := int) 
-    ("newShapeCount" := int)
-    ("categoryCount" := int)
-    ("meanCreated" := int)
-    ("beautifulPercent" := int)
-    ("foundPopularShape" := bool)
-    ("searchScore" := int)
-    ("searchScorePercent" := int)
-    ("searchStyle" := string)
-    ("searchResults" := string)
+  list ("customData" := (decode Statistics 
+    |> required "foundShapeCount" int 
+    |> required "newShapeCount" int
+    |> required "categoryCount" int
+    |> required "meanCreated" int
+    |> required "beautifulPercent" int
+    |> required "foundPopularShape" bool
+    |> required "searchScore" int
+    |> required "searchScorePercent" int
+    |> required "searchStyle" string
+    |> required "searchResults" string
    )) 
 
 getPlayerId : String -> Maybe String
@@ -170,13 +171,13 @@ view model =
             (text "Your playing method suggests you are ")
           , (span [attribute "class" "highlight"] [text (toString statistics.searchScorePercent ++ "%")])
           , (text " to make ")
-          , (span [attribute "class" "highlight"] [text (toString statistics.searchStyle)])
+          , (span [attribute "class" "highlight"] [text statistics.searchStyle])
           , (text " searches")
           ]
         , p []
           [
             (text "These kind of creative searches tend to provide more ")
-          , (span [attribute "class" "highlight"] [text (toString statistics.searchResults)])
+          , (span [attribute "class" "highlight"] [text statistics.searchResults])
           , (text " shapes in our game.")
           ]
         , p []
