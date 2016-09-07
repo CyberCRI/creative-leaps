@@ -26,13 +26,17 @@ getSessionStats playerId =
 
 decodeStatistics : Decoder (List Statistics)
 decodeStatistics =
-  list ("customData" := (object6 Statistics 
+  list ("customData" := (object10 Statistics 
     ("foundShapeCount" := int) 
     ("newShapeCount" := int)
     ("categoryCount" := int)
     ("meanCreated" := int)
     ("beautifulPercent" := int)
     ("foundPopularShape" := bool)
+    ("searchScore" := int)
+    ("searchScorePercent" := int)
+    ("searchStyle" := string)
+    ("searchResults" := string)
    )) 
 
 getPlayerId : String -> Maybe String
@@ -57,6 +61,10 @@ type alias Statistics =
   , meanCreated: Int
   , beautifulPercent: Int
   , foundPopularShape: Bool
+  , searchScore: Int
+  , searchScorePercent: Int
+  , searchStyle: String
+  , searchResults: String
   }
 
 type alias Model = 
@@ -88,6 +96,10 @@ init flags =
         , meanCreated = 4
         , beautifulPercent = 33
         , foundPopularShape = True
+        , searchScore = 1
+        , searchScorePercent = 100
+        , searchStyle = "fast and exhaustive"
+        , searchResults = "unique"
         } 
     }, 
     Cmd.none)
@@ -153,6 +165,28 @@ view model =
             ]
           else
             text ""
+        , p []
+          [
+            (text "Your playing method suggests you are ")
+          , (span [attribute "class" "highlight"] [text (toString statistics.searchScorePercent ++ "%")])
+          , (text " to make ")
+          , (span [attribute "class" "highlight"] [text (toString statistics.searchStyle)])
+          , (text " searches")
+          ]
+        , p []
+          [
+            (text "These kind of creative searches tend to provide more ")
+          , (span [attribute "class" "highlight"] [text (toString statistics.searchResults)])
+          , (text " shapes in our game.")
+          ]
+        , p []
+          [
+            (text "Share your score and invite others to play and discover their creative search strategies.")
+          ]
         ]
   ]
 
+-- slider ball : [
+--    465 + memory.stats.searchScore * 255, 
+--    300
+--]
