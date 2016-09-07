@@ -5,6 +5,9 @@ import Html.App as App
 import Http 
 import Json.Decode exposing (..)
 import Task
+import Array
+import String
+
 
 main =
   App.programWithFlags { init = init, view = view, subscriptions = subscriptions, update = update }
@@ -31,6 +34,17 @@ decodeStatistics =
     ("foundPopularShape" := bool)
    )) 
 
+getPlayerId : String -> Maybe String
+getPlayerId path = 
+  let 
+    a = Array.fromList (String.split "/" path)
+    l = Array.length a
+  in 
+    if l /= 2 then
+      Nothing
+    else 
+      Array.get 1 a
+
 
 -- MODEL
 
@@ -50,10 +64,16 @@ type alias Model =
   }
 
 
-init : { playerId: Maybe String } -> (Model, Cmd Msg)
+init : { path: Maybe String } -> (Model, Cmd Msg)
 init flags = 
-  case flags.playerId of
-    Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
+  case flags.path of
+    Just path -> 
+      let 
+        playerId = getPlayerId path
+      in 
+        case playerId of
+          Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
+          Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
     Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
 
 
