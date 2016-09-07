@@ -2,6 +2,7 @@ port module Main exposing (..)
 
 import Html exposing (..)
 import Html.App as App
+import Html.Attributes exposing (attribute)
 import Http 
 import Json.Decode exposing (..)
 import Task
@@ -65,16 +66,31 @@ type alias Model =
 
 
 init : { path: Maybe String } -> (Model, Cmd Msg)
+--init flags = 
+--  case flags.path of
+--    Just path -> 
+--      let 
+--        playerId = getPlayerId path
+--      in 
+--        case playerId of
+--          Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
+--          Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
+--    Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
+
+-- Temporarily fake data without internet connection
 init flags = 
-  case flags.path of
-    Just path -> 
-      let 
-        playerId = getPlayerId path
-      in 
-        case playerId of
-          Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
-          Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
-    Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
+  ({  playerId = Just "qsdf" 
+    , statistics =
+        Just {
+          foundShapeCount = 10
+        , newShapeCount = 2
+        , categoryCount = 1
+        , meanCreated = 4
+        , beautifulPercent = 33
+        , foundPopularShape = True
+        } 
+    }, 
+    Cmd.none)
 
 
 -- UPDATE
@@ -91,6 +107,7 @@ update msg model =
         Just statistics -> ({ model | statistics = Just statistics }, Cmd.none)
     FetchFail _ -> (model, Cmd.none)
 
+
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
@@ -104,9 +121,38 @@ view : Model -> Html Msg
 view model =
   div []
   [
-    h1 [] [text "Creative Leaps - Feedback"]
+    h3 [] [text "Creative Leaps - Results"]
   , case model.statistics of 
-      Just statistics -> p [] [text ("You found " ++ (toString statistics.foundShapeCount) ++ " shapes")]
       Nothing -> p [] [text ("Can't find any statistics for you")]
+      Just statistics -> 
+        div [] 
+        [
+          p [] 
+          [
+            (text "You created ")
+          , (span [attribute "class" "highlight"] [text (toString statistics.foundShapeCount)])
+          , (text " shapes.")
+          ]
+        , p [] 
+          [
+            (text "Your most unique collected shapes were found by ") 
+          , (span [attribute "class" "highlight"] [text (toString statistics.meanCreated ++ "%")])
+          , (text " of other people.") 
+          ]
+        , p []
+          [
+            (span [attribute "class" "highlight"] [text (toString statistics.beautifulPercent ++ "%")])
+          , (text " of the beautiful shapes you chose were thought as beautiful by other people.")
+          ]
+        , if statistics.foundPopularShape then
+            p [] 
+            [
+              (text "Your most beautiful shape got ")
+            , (span [attribute "class" "highlight"] [text "extremely high ratings"])
+            , (text " by other players.")
+            ]
+          else
+            text ""
+        ]
   ]
 
