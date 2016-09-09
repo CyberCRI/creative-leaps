@@ -68,9 +68,11 @@ type alias Statistics =
   , searchResults: String
   }
 
+type StatisticsOwnership = Yes Statistics | No | Looking 
+
 type alias Model = 
   { playerId: Maybe String
-  , statistics: Maybe Statistics
+  , statistics: StatisticsOwnership 
   }
 
 
@@ -82,9 +84,9 @@ init flags =
         playerId = getPlayerId path
       in 
         case playerId of
-          Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
-          Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
-    Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
+          Just playerId -> ({ playerId = Just playerId, statistics = Looking }, getSessionStats playerId)
+          Nothing -> ({ playerId = Nothing, statistics = No }, Cmd.none)
+    Nothing -> ({ playerId = Nothing, statistics = No }, Cmd.none)
 
 -- Temporarily fake data without internet connection
 --init flags = 
@@ -117,8 +119,8 @@ update msg model =
     FetchSucceed value -> 
       case (List.head value) of 
         Nothing -> (model, Cmd.none)
-        Just statistics -> ({ model | statistics = Just statistics }, Cmd.none)
-    FetchFail _ -> (model, Cmd.none)
+        Just statistics -> ({ model | statistics = Yes statistics }, Cmd.none)
+    FetchFail _ -> ({ model | statistics = No }, Cmd.none)
 
 
 -- SUBSCRIPTIONS
@@ -136,8 +138,9 @@ view model =
   [
     h3 [] [text "Creative Leaps - Results"]
   , case model.statistics of 
-      Nothing -> p [] [text ("Can't find any statistics for you")]
-      Just statistics -> 
+      No -> p [] [text ("Can't find any statistics for you")]
+      Looking -> p [] [text ("Looking up your statistics ...")]
+      Yes statistics -> 
         div [] 
         [
           p [] 
