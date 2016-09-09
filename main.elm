@@ -2,7 +2,7 @@ port module Main exposing (..)
 
 import Html exposing (..)
 import Html.App as App
-import Html.Attributes exposing (attribute, style, class, id)
+import Html.Attributes exposing (attribute, style, class, id, href)
 import Http 
 import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (decode, required)
@@ -189,9 +189,9 @@ view model =
           , (span [class "highlight"] [text statistics.searchResults])
           , (text " shapes in our game.")
           ]
-        , p [id "share-block"]
+        , div [id "share-block"]
           [
-            (text "Share your score and invite others to play and discover their creative search strategies.")
+            p [] [text "Share your score and invite others to play and discover their creative search strategies."]
           ]
         ]
   ]
