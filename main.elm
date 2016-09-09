@@ -189,7 +189,7 @@ view model =
           , (span [class "highlight"] [text statistics.searchResults])
           , (text " shapes in our game.")
           ]
-        , p []
+        , p [id "share-block"]
           [
             (text "Share your score and invite others to play and discover their creative search strategies.")
           ]

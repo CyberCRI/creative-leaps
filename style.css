@@ -46,6 +46,10 @@ a {
     /* left defined in JS */
 }
 
+#share-block {
+    margin-top: 50px;
+}
+
 
 #gameContent input, button {
   color: black;
