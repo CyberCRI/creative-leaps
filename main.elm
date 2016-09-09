@@ -75,35 +75,35 @@ type alias Model =
 
 
 init : { path: Maybe String } -> (Model, Cmd Msg)
---init flags = 
---  case flags.path of
---    Just path -> 
---      let 
---        playerId = getPlayerId path
---      in 
---        case playerId of
---          Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
---          Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
---    Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
+init flags = 
+  case flags.path of
+    Just path -> 
+      let 
+        playerId = getPlayerId path
+      in 
+        case playerId of
+          Just playerId -> ({ playerId = Just playerId, statistics = Nothing }, getSessionStats playerId)
+          Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
+    Nothing -> ({ playerId = Nothing, statistics = Nothing }, Cmd.none)
 
 -- Temporarily fake data without internet connection
-init flags = 
-  ({  playerId = Just "qsdf" 
-    , statistics =
-        Just {
-          foundShapeCount = 10
-        , newShapeCount = 2
-        , categoryCount = 1
-        , meanCreated = 4
-        , beautifulPercent = 33
-        , foundPopularShape = True
-        , searchScore = 0
-        , searchScorePercent = 100
-        , searchStyle = "fast and exhaustive"
-        , searchResults = "unique"
-        } 
-    }, 
-    Cmd.none)
+--init flags = 
+--  ({  playerId = Just "qsdf" 
+--    , statistics =
+--        Just {
+--          foundShapeCount = 10
+--        , newShapeCount = 2
+--        , categoryCount = 1
+--        , meanCreated = 4
+--        , beautifulPercent = 33
+--        , foundPopularShape = True
+--        , searchScore = 0
+--        , searchScorePercent = 100
+--        , searchStyle = "fast and exhaustive"
+--        , searchResults = "unique"
+--        } 
+--    }, 
+--    Cmd.none)
 
 
 -- UPDATE
