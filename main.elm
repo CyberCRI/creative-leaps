@@ -2,7 +2,7 @@ port module Main exposing (..)
 
 import Html exposing (..)
 import Html.App as App
-import Html.Attributes exposing (attribute)
+import Html.Attributes exposing (attribute, style, class, id)
 import Http 
 import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (decode, required)
@@ -34,7 +34,7 @@ decodeStatistics =
     |> required "meanCreated" int
     |> required "beautifulPercent" int
     |> required "foundPopularShape" bool
-    |> required "searchScore" int
+    |> required "searchScore" float
     |> required "searchScorePercent" int
     |> required "searchStyle" string
     |> required "searchResults" string
@@ -62,7 +62,7 @@ type alias Statistics =
   , meanCreated: Int
   , beautifulPercent: Int
   , foundPopularShape: Bool
-  , searchScore: Int
+  , searchScore: Float
   , searchScorePercent: Int
   , searchStyle: String
   , searchResults: String
@@ -97,7 +97,7 @@ init flags =
         , meanCreated = 4
         , beautifulPercent = 33
         , foundPopularShape = True
-        , searchScore = 1
+        , searchScore = 0
         , searchScorePercent = 100
         , searchStyle = "fast and exhaustive"
         , searchResults = "unique"
@@ -143,41 +143,50 @@ view model =
           p [] 
           [
             (text "You created ")
-          , (span [attribute "class" "highlight"] [text (toString statistics.foundShapeCount)])
+          , (span [class "highlight"] [text (toString statistics.foundShapeCount)])
           , (text " shapes.")
           ]
         , p [] 
           [
             (text "Your most unique collected shapes were found by ") 
-          , (span [attribute "class" "highlight"] [text (toString statistics.meanCreated ++ "%")])
+          , (span [class "highlight"] [text (toString statistics.meanCreated ++ "%")])
           , (text " of other people.") 
           ]
         , p []
           [
-            (span [attribute "class" "highlight"] [text (toString statistics.beautifulPercent ++ "%")])
+            (span [class "highlight"] [text (toString statistics.beautifulPercent ++ "%")])
           , (text " of the beautiful shapes you chose were thought as beautiful by other people.")
           ]
         , if statistics.foundPopularShape then
             p [] 
             [
               (text "Your most beautiful shape got ")
-            , (span [attribute "class" "highlight"] [text "extremely high ratings"])
+            , (span [class "highlight"] [text "extremely high ratings"])
             , (text " by other players.")
             ]
           else
             text ""
+        , div [id "slider-container"] 
+          [
+            div [id "slider"] []
+          , let 
+              -- searchScore is in the range [-1, 1]
+              ballOffset = (toString ((statistics.searchScore + 1) / 2 * 510)) ++ "px"
+            in 
+              div [id "slider-ball", style [("left", ballOffset)]] []
+          ]
         , p []
           [
             (text "Your playing method suggests you are ")
-          , (span [attribute "class" "highlight"] [text (toString statistics.searchScorePercent ++ "%")])
+          , (span [class "highlight"] [text (toString statistics.searchScorePercent ++ "%")])
           , (text " to make ")
-          , (span [attribute "class" "highlight"] [text statistics.searchStyle])
+          , (span [class "highlight"] [text statistics.searchStyle])
           , (text " searches")
           ]
         , p []
           [
             (text "These kind of creative searches tend to provide more ")
-          , (span [attribute "class" "highlight"] [text statistics.searchResults])
+          , (span [class "highlight"] [text statistics.searchResults])
           , (text " shapes in our game.")
           ]
         , p []
@@ -186,8 +195,3 @@ view model =
           ]
         ]
   ]
-
--- slider ball : [
---    465 + memory.stats.searchScore * 255, 
---    300
---]
