@@ -40,16 +40,17 @@ decodeStatistics =
     |> required "searchResults" string
    )) 
 
+-- Expecting a URL like "/results/UID" which splits into ["", "results", "UID"]
 getPlayerId : String -> Maybe String
 getPlayerId path = 
   let 
     a = Array.fromList (String.split "/" path)
     l = Array.length a
   in 
-    if l /= 2 then
+    if l /= 3 then
       Nothing
     else 
-      Array.get 1 a
+      Array.get 2 a
 
 
 -- MODEL
@@ -136,7 +137,7 @@ view : Model -> Html Msg
 view model =
   div []
   [
-    h3 [] [text "Creative Leaps - Results"]
+    h3 [] [text "Leaps - Results"]
   , case model.statistics of 
       No -> p [] [text ("Can't find any statistics for you")]
       Looking -> p [] [text ("Looking up your statistics ...")]

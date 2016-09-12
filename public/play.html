@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Leaps - Play</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<!-- Facebook boilderplate -->
+	<div id="fb-root"></div>
+	<script>
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.7";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+	<div id="gameContent" class="container">
+		<h3>Leaps - Play</h3>
+
+		<iframe id="game-embed" src="http://localhost:5001/game/778385bd1c281820/embed?backgroundColor=black" width="100%" height="550"></iframe>
+	</div> 
+
+	<div class="container">
+		<a class="twitter-share-button" data-size="large" data-show-count="false" href="https://twitter.com/intent/tweet?text=I%20just%20played%20Leaps%20and%20found%20my%20own%20creation%20style,%20try%20it%20and%20discover%20yours">Tweet</a>
+		<br>
+		<div class="fb-like" data-layout="button" data-size="large" data-action="like" data-show-faces="true" data-share="true"></div>
+	</div>
+
+	<!-- Twitter boilderplate -->
+	<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+</html>

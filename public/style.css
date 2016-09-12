@@ -109,3 +109,8 @@ input, select, InputField {
 .highlight {
     color: lawngreen;
 }
+
+#game-embed {
+    border: none;
+    overflow: hidden;
+}
