@@ -2,35 +2,64 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Leaps - Play</title>
+	<title>Shifting Shapes (LITW)</title>
 	<link rel="stylesheet" href="style.css">
+
+	<!-- open graph tags -->
+	<meta property="fb:app_id" content="631565537014374">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="http://26d88743.ngrok.io/Mr_Pipo_thoughts.png">
+	<meta property="og:image:width" content="530">
+	<meta property="og:image:height" content="530">
+	<meta property="og:site_name" content="Shifting Shapes (LITW)">
+	<meta property="og:title" content="Creativity styles">
+	<meta property="og:url" content="http://26d88743.ngrok.io/">
+	<meta property="og:description" content="What is your creativity style? Discover your creativity style and compare with others by playing this game. Takes about 15 minutes.">
 </head>
 <body>
-	<!-- Facebook boilderplate -->
-	<div id="fb-root"></div>
-	<script>
-	(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s); js.id = id;
-		js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.7";
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
-	</script>
+	<div id="root-container">
+		<!-- Facebook boilderplate -->
+		<div id="fb-root"></div>
+		<script>
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.7";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
 
-	<div id="gameContent" class="container">
-		<h3>Leaps - Play</h3>
+		// From http://stackoverflow.com/a/13419367/209505
+		function parseQuery(qstr) {
+			var query = {};
+			var a = qstr.substr(1).split('&');
+			for (var i = 0; i < a.length; i++) {
+				var b = a[i].split('=');
+				query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+			}
+			return query;
+		}
+		</script>
 
-		<iframe id="game-embed" src="https://redwire.io/game/4c9f2b0cf81bc9d2/embed?backgroundColor=black" width="100%" height="550"></iframe>
-	</div> 
+		<h3 id="title">Shifting Shapes (LITW)</h3>
 
-	<div class="container">
-		<a class="twitter-share-button" data-size="large" data-show-count="false" href="https://twitter.com/intent/tweet?text=I%20just%20played%20Leaps%20and%20found%20my%20own%20creation%20style,%20try%20it%20and%20discover%20yours&url=https%3A%2F%2Fharvard.az1.qualtrics.com%2FSE%2F%3FSID%3DSV_23uC4tHxDbuI6wZ">Tweet</a>
-		<br>
-		<div class="fb-like" data-layout="button" data-size="large" data-action="like" data-show-faces="true" data-share="true" data-href="https://harvard.az1.qualtrics.com/SE/?SID=SV_23uC4tHxDbuI6wZ"></div>
+		<iframe id="game-embed" width="100%" height="75%"></iframe>
+
+		<script>
+			var gameUrl = "https://redwire.io/game/69ce4c5d32d6a8e3/embed?backgroundColor=black";
+			var query = parseQuery(window.location.search);
+			if(query.id) gameUrl += "&id=" + query.id;
+			document.getElementById("game-embed").src = gameUrl;
+		</script>
+
+		<div id="sharing-container">
+			<a class="twitter-share-button" data-size="large" data-show-count="false" href="https://twitter.com/intent/tweet?text=What%20is%20your%20creativity%20style%3F%20Discover%20your%20creativity%20style%20and%20compare%20with%20others%20by%20playing%20this%20game.%20http%3A%2F%2Fshapes.crigamelab.org%2F">Tweet</a>
+			<br>
+			<div class="fb-like" data-layout="button" data-size="large" data-action="like" data-show-faces="true" data-share="true" data-href="http://shapes.crigamelab.org"></div>
+		</div>
+
+		<!-- Twitter boilderplate -->
+		<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 	</div>
-
-	<!-- Twitter boilderplate -->
-	<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>

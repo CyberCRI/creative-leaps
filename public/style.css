@@ -2,12 +2,46 @@ body {
     background-color: black;
 }
 
+#root-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    color: white;
+    font-family: Arial;
+}
+
+#root-container #title {
+    position: absolute;
+    top: 0;
+    height: 10%;
+
+    text-align: center;
+    width: 100%;
+}
+
+#root-container #game-embed {
+    position: absolute;
+    top: 10%;
+}
+
+#root-container #sharing-container {
+    position: absolute;
+    top: 85%;
+    height: 15%;
+
+    text-align: center;
+    width: 100%;
+}
+
 .container {
   color: white;
   font-family: Arial;
   font-size: 20px;
 
-  width: 960px;
+  width: 100%; 
   margin: auto;
 
   text-align: center;
